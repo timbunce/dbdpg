@@ -1997,6 +1997,14 @@ static void pg_st_split_statement (pTHX_ imp_sth_t * imp_sth, int version, char 
 		else if (! imp_sth->dollaronly) {
 			/* Question mark style */
 			if ('?' == ch) {
+				if ('\\' == oldch) { /* Is escaped */
+					/* remove (copy down over) the backslash and ignore the question mark */
+					unsigned char *p = statement-2;
+					while(*p++) {
+						*(p-1) = *p;
+					}
+					continue;
+				}
 				placeholder_type = 1;
 			}
 			/* Colon style */
